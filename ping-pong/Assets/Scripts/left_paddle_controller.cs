@@ -19,7 +19,7 @@ public class left_paddle_controller : MonoBehaviour
     {
         if((Input.GetKey(KeyCode.Q)))
         {
-            if(initial.y <= 3.6)
+            if(initial.y <= 4.1)
             {
                 initial.y = initial.y + displacement;
             }
@@ -27,7 +27,7 @@ public class left_paddle_controller : MonoBehaviour
 
         else if((Input.GetKey(KeyCode.A)))
         {
-            if(initial.y >= -3.6)
+            if(initial.y >= -4.1)
             {
                 initial.y = initial.y - displacement;
             }
