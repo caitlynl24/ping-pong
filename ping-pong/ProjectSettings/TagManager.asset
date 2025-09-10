@@ -6,6 +6,7 @@ TagManager:
   tags:
   - left_paddle
   - right_paddle
+  - wall
   layers:
   - Default
   - TransparentFX
