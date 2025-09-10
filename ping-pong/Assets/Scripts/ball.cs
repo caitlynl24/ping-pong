@@ -9,8 +9,8 @@ public class ball : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        //This should be (0,0) not (1,1)
-        direction = Vector2.one.normalized;
+        //Probably put a coditional statement here so it goes toward each player based on who won last
+        direction = Vector2.right;
     }
 
     // Update is called once per frame
