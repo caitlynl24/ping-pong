@@ -9,7 +9,7 @@ public class ball : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        //(1, 1)
+        //This should be (0,0) not (1,1)
         direction = Vector2.one.normalized;
     }
 
