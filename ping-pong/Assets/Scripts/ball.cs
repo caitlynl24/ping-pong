@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class ball : MonoBehaviour
 {
+    //Assign this in the Inspector
+    public ScoreManager scoreManager;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     Rigidbody2D rb;
     public float speed = 5f;
@@ -68,5 +71,28 @@ public class ball : MonoBehaviour
             //Reverse vertical direction
             direction.y = -direction.y;
         }
+
+        else if(collision.gameObject.CompareTag("leftWall"))
+        {
+            scoreManager.RightPlayerScores();
+        }
+
+        else if(collision.gameObject.CompareTag("rightWall"))
+        {
+            scoreManager.LeftPlayerScores();
+        }
+    }
+
+    public void ResetBall(int startingDirection)
+    {
+        //Reset position to center
+        transform.position = Vector2.zero;
+
+        //Random slight vertical direction
+        float yDir = Random.Range(0, 2) == 0 ? -1f : 1f;
+        direction = new Vector2(startingDirection, yDir).normalized;
+
+        //Reset speed
+        speed = 5f;
     }
 }
