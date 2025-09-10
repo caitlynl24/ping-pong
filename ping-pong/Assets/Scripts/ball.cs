@@ -9,8 +9,12 @@ public class ball : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        //Probably put a coditional statement here so it goes toward each player based on who won last or a randomizer for which way the ball will go
-        direction = Vector2.right;
+        //Randomize initial direction
+        //Random.Range(0, 2) gives either 0 or 1
+        float xDir = Random.Range(0, 2) == 0 ? -1f : 1f;
+        float yDir = Random.Range(0, 2) == 0 ? -1f : 1f;
+
+        direction = new Vector2(xDir, yDir);
     }
 
     // Update is called once per frame
@@ -29,6 +33,7 @@ public class ball : MonoBehaviour
 
         else if(collision.gameObject.CompareTag("wall"))
         {
+            //Reverse vertical direction
             direction.y = -direction.y;
         }
 
