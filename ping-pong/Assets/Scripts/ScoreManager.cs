@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class ScoreManager : MonoBehaviour
@@ -10,29 +9,57 @@ public class ScoreManager : MonoBehaviour
     public TextMeshProUGUI leftScoreText;
     public TextMeshProUGUI rightScoreText;
 
+    //Assign this in the Inspector
+    public TextMeshProUGUI gameOverText;
+
     //Reference to the ball script
     public ball ballScript;
+
+    public int winningScore = 5;
+
+    private bool gameEnded = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         UpdateScoreUI();
+        gameOverText.gameObject.SetActive(false);
     }
 
     public void LeftPlayerScores()
     {
+        if(gameEnded) return;
+
         leftPlayerScore++;
         UpdateScoreUI();
-        //Send ball to the right
-        ResetBall(-1);
+
+        if(leftPlayerScore >= winningScore)
+        {
+            EndGame("Left Player Wins!");
+        }
+        else
+        {
+            //Send ball to the right
+            ResetBall(-1);
+        }
     }
 
     public void RightPlayerScores()
     {
+        if(gameEnded) return;
+
         rightPlayerScore++;
         UpdateScoreUI();
-        //Send ball to the left
-        ResetBall(1);
+
+        if(rightPlayerScore >= winningScore)
+        {
+            EndGame("Right Player Wins!");
+        }
+        else
+        {
+            //Send ball to the left
+            ResetBall(1);
+        }
     }
 
     // Update is called once per frame
@@ -45,5 +72,12 @@ public class ScoreManager : MonoBehaviour
     void ResetBall(int direction)
     {
         ballScript.ResetBall(direction);
+    }
+
+    void EndGame(string message)
+    {
+        //Show game over message
+        gameOverText.text = message;
+        gameOverText.gameObject.SetActive(true);
     }
 }
