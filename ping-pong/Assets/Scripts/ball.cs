@@ -4,8 +4,14 @@ public class ball : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     Rigidbody2D rb;
-    public float speed;
+    public float speed = 5f;
     public Vector2 direction;
+
+    private float timeElapsed = 0f;
+    private float speedIncreaseInterval = 15f;
+    //how much to increase speed by each time
+    public float speedIncrement = 1f;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -21,6 +27,17 @@ public class ball : MonoBehaviour
     void Update()
     {
         rb.linearVelocity = direction * speed;
+
+        //Time tracking for speed increase
+        timeElapsed += Time.deltaTime;
+
+        if(timeElapsed >= speedIncreaseInterval)
+        {
+            speed += speedIncrement;
+            //Reset timer to allow next speed increase
+            timeElapsed = 0f;
+            Debug.Log("Ball speed increased to: " + speed);
+        }
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -29,6 +46,21 @@ public class ball : MonoBehaviour
         {
             //Reverse horizontal direction
             direction.x = -direction.x;
+
+             //Calculate hit factor
+            float paddleY = collision.transform.position.y;
+            float ballY = transform.position.y;
+
+            float paddleHeight = collision.bounds.size.y;
+
+            //Get difference relative to paddle height, normalized between -1 and 1
+            float hitFactor = (ballY - paddleY) / paddleHeight;
+
+            //Adjust vertical direction based on hit point
+            direction.y = hitFactor;
+
+            //Normalize to keep speed consistent
+            direction = direction.normalized;
         }
 
         else if(collision.gameObject.CompareTag("wall"))
@@ -36,20 +68,5 @@ public class ball : MonoBehaviour
             //Reverse vertical direction
             direction.y = -direction.y;
         }
-
-        //Calculate hit factor
-        float paddleY = collision.transform.position.y;
-        float ballY = transform.position.y;
-
-        float paddleHeight = collision.bounds.size.y;
-
-        //Get difference relative to paddle height, normalized between -1 and 1
-        float hitFactor = (ballY - paddleY) / paddleHeight;
-
-        //Adjust vertical direction based on hit point
-        direction.y = hitFactor;
-
-        //Normalize to keep speed consistent
-        direction = direction.normalized;
     }
 }
