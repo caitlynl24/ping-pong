@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class left_paddle_controller : MonoBehaviour
 {
-
     Rigidbody2D pad;
     Vector2 initial;
     public float displacement;
@@ -24,7 +23,6 @@ public class left_paddle_controller : MonoBehaviour
                 initial.y = initial.y + displacement;
             }
         }
-
         else if((Input.GetKey(KeyCode.A)))
         {
             if(initial.y >= -4.1)
@@ -32,7 +30,6 @@ public class left_paddle_controller : MonoBehaviour
                 initial.y = initial.y - displacement;
             }
         }
-
         pad.MovePosition(initial);
     }
 }

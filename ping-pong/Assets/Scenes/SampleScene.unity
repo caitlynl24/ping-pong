@@ -738,8 +738,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   scoreManager: {fileID: 1242423769}
   speed: 5
-  direction: {x: 0, y: 0}
   speedIncrement: 1
+  speedIncreaseInterval: 15
 --- !u!50 &746179296
 Rigidbody2D:
   serializedVersion: 5

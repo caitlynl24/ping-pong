@@ -2,42 +2,42 @@ using UnityEngine;
 
 public class ball : MonoBehaviour
 {
-    //Assign this in the Inspector
+    [Header("Gameplay References")]
+    //Reference to the score manager, assign in Inspector
     public ScoreManager scoreManager;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    Rigidbody2D rb;
+    [Header("Ball Settings")]
     public float speed = 5f;
-    public Vector2 direction;
-
-    private float timeElapsed = 0f;
-    private float speedIncreaseInterval = 15f;
-    //how much to increase speed by each time
+    //Amount to increase speed
     public float speedIncrement = 1f;
+    //Time in seconds to increase speed
+    public float speedIncreaseInterval = 15f;
+
+    private Rigidbody2D rb;
+    private Vector2 direction;
+    private float timeElapsed = 0f;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        //Randomize initial direction
-        //Random.Range(0, 2) gives either 0 or 1
+
+        //Set initial direction randomly
         float xDir = Random.Range(0, 2) == 0 ? -1f : 1f;
         float yDir = Random.Range(0, 2) == 0 ? -1f : 1f;
-
-        direction = new Vector2(xDir, yDir);
+        direction = new Vector2(xDir, yDir).normalized;
     }
 
-    // Update is called once per frame
     void Update()
     {
+        //Move the ball based on current direction and speed
         rb.linearVelocity = direction * speed;
 
-        //Time tracking for speed increase
+        //Track time to increase speed over intervals
         timeElapsed += Time.deltaTime;
-
         if(timeElapsed >= speedIncreaseInterval)
         {
             speed += speedIncrement;
-            //Reset timer to allow next speed increase
+            //Reset timer
             timeElapsed = 0f;
             Debug.Log("Ball speed increased to: " + speed);
         }
@@ -45,39 +45,35 @@ public class ball : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.CompareTag("left_paddle") || collision.gameObject.CompareTag("right_paddle"))
+        string tag = collision.gameObject.tag;
+
+        if(tag == "left_paddle" || tag == "right_paddle")
         {
             //Reverse horizontal direction
             direction.x = -direction.x;
 
-             //Calculate hit factor
+             //Calculate vertical direction based on collision point
             float paddleY = collision.transform.position.y;
             float ballY = transform.position.y;
-
             float paddleHeight = collision.bounds.size.y;
 
-            //Get difference relative to paddle height, normalized between -1 and 1
+            //Range [-1, 1]
             float hitFactor = (ballY - paddleY) / paddleHeight;
-
-            //Adjust vertical direction based on hit point
             direction.y = hitFactor;
 
-            //Normalize to keep speed consistent
+            //Normalize to maintain consistent speed
             direction = direction.normalized;
         }
-
-        else if(collision.gameObject.CompareTag("wall"))
+        else if(tag == "wall")
         {
-            //Reverse vertical direction
+            //Bounce off top or bottom wall
             direction.y = -direction.y;
         }
-
-        else if(collision.gameObject.CompareTag("leftWall"))
+        else if(tag == "leftWall")
         {
             scoreManager.RightPlayerScores();
         }
-
-        else if(collision.gameObject.CompareTag("rightWall"))
+        else if(tag == "rightWall")
         {
             scoreManager.LeftPlayerScores();
         }
@@ -85,14 +81,15 @@ public class ball : MonoBehaviour
 
     public void ResetBall(int startingDirection)
     {
-        //Reset position to center
+        //Reset ball to center
         transform.position = Vector2.zero;
 
-        //Random slight vertical direction
+        //Random slight vertical component
         float yDir = Random.Range(0, 2) == 0 ? -1f : 1f;
         direction = new Vector2(startingDirection, yDir).normalized;
 
-        //Reset speed
+        //Reset speed and timer
         speed = 5f;
+        timeElapsed = 0f;
     }
 }

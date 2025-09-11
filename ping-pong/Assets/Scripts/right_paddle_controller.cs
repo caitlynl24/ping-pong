@@ -23,7 +23,6 @@ public class right_paddle_controller : MonoBehaviour
                 initial.y = initial.y + displacement;
             }
         }
-
         else if((Input.GetKey(KeyCode.L)))
         {
             if(initial.y >= -4.1)
@@ -31,7 +30,6 @@ public class right_paddle_controller : MonoBehaviour
                 initial.y = initial.y - displacement;
             }
         }
-
         pad.MovePosition(initial);
     }
 }
